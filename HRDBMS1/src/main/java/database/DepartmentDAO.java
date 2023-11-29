@@ -130,6 +130,36 @@ public class DepartmentDAO {
 	       return oneDepartment;
 	   }
 	
+	public List<String> getAllDepartmentNames() {
+
+	       openConnection();
+	       List<String> departmentNames = new ArrayList<>();
+	       ResultSet rs1 = null;
+	       // Creates select statement and executes it
+	       try {
+	    	   String selectSQL = "SELECT DISTINCT department_name FROM departments ORDER BY department_name";
+	           PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+	           rs1 = preparedStatement.executeQuery();
+	           // Retrieves the results
+	           while (rs1.next()) {
+	        	   String departmentName = rs1.getString("department_name");
+	        	   departmentNames.add(departmentName);
+	           }
+	       } catch (SQLException se) {
+	           System.out.println(se);
+	       } finally {
+	           if (rs1 != null) {
+	               try {
+	                   rs1.close();
+	               } catch (SQLException e) {
+	                   e.printStackTrace();
+	               }
+	           }
+	       }
+
+	       return departmentNames;
+	   } 
+	
 	
 		
 				
