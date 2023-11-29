@@ -83,6 +83,28 @@
 	</div>
 </div>
 
+<div class="table-container">
+<table id="salaries" border='1' class="table table-bordered border-primary mt-4 mx-auto w-auto">
+	<tr class="table-primary">
+		<th scope='col'>Salary_id</th>
+		<th scope='col'>Job_title</th>
+		<th scope='col'>Salary</th>
+		<th scope='col'>Update</th>
+		<th scope='col'>Delete</th>
+	</tr>
+	<c:forEach items="${salaries}" var="s">
+	<tr class='table-secondary'>
+		<td>${s.salary_id}</td>
+		<td>${s.job_title}</td>
+		<td>${s.salary}</td>
+		<td><a class="btn btn-info" href="./UpdateController?salary_id=${s.salary_id}">Update</a></td>
+		<td><a class="btn btn-danger" href="./DeleteController?salary_id=${s.salary_id}">Delete</a></td>
+	</tr>
+	</c:forEach>
+</table>
+	<br>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>	
 </body>
 </html>
