@@ -174,7 +174,22 @@ public class SalaryDAO {
 		       return jobTitles;
 		   }   
 		
-		
+		public boolean insertSalary(Salaries sal) throws SQLException {
+
+			openConnection();
+			boolean b = false;
+			try {
+				String sql = "insert into salaries (job_title, salary) "
+						+ "values ('" + sal.getJob_title() + "','" + sal.getSalary() + "');";
+				System.out.println(sql);
+				b = stmt.execute(sql);
+				closeConnection();
+				b = true;
+			} catch (SQLException s) {
+				throw new SQLException("Salary Not Added");
+			}
+			return b;
+		}
 	}
 	
 
