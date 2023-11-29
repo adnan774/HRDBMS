@@ -99,6 +99,38 @@ public class DepartmentDAO {
 
         return allDepartments;
     }
+	
+	public Departments getDepartmentByID(int department_id) {
+
+	       openConnection();
+	       oneDepartment = null;
+	       ResultSet rs1 = null;
+	       // Creates select statement and executes it
+	       try {
+	           String selectSQL = "select * from departments where department_id=?";
+	           PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+	           preparedStatement.setInt(1, department_id);
+	           rs1 = preparedStatement.executeQuery();
+	           // Retrieves the results
+	           while (rs1.next()) {
+	        	   oneDepartment = getNextDepartment(rs1);
+	           }
+	       } catch (SQLException se) {
+	           System.out.println(se);
+	       } finally {
+	           if (rs1 != null) {
+	               try {
+	                   rs1.close();
+	               } catch (SQLException e) {
+	                   e.printStackTrace();
+	               }
+	           }
+	       }
+
+	       return oneDepartment;
+	   }
+	
+	
 		
 				
 	}
