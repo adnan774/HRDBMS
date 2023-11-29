@@ -190,6 +190,28 @@ public class SalaryDAO {
 			}
 			return b;
 		}
+		
+		public boolean updateSalary(Salaries sal) throws SQLException {
+		    openConnection();
+		    boolean isSuccess = false;
+		    
+		    try {
+		        String sql = "UPDATE salaries SET job_title = ?, salary = ? WHERE salary_id = ?";
+		        PreparedStatement pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, sal.getJob_title());
+		        pstmt.setFloat(2, sal.getSalary());
+		        pstmt.setInt(3, sal.getSalary_id());
+
+		        int affectedRows = pstmt.executeUpdate();
+		        isSuccess = affectedRows > 0;
+		        closeConnection();
+		    } catch (SQLException s) {
+		        throw new SQLException("Salary Not Updated");
+		    }
+		    return isSuccess;
+		}
+		
+		
 	}
 	
 
