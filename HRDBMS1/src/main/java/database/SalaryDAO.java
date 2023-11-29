@@ -211,7 +211,23 @@ public class SalaryDAO {
 		    return isSuccess;
 		}
 		
+		public boolean deleteSalary(int salary_id) throws SQLException {
+			
+			openConnection();
+			boolean b = false;
+			try {	
+				String sql = "delete from salaries WHERE salary_id = "+ salary_id;
+				System.out.println(sql);
+			
+				stmt.executeUpdate(sql);
 		
+				closeConnection();
+				b = true;
+			} catch (SQLException s) {
+				throw new SQLException("Salary Not Deleted");
+			}
+			return b;
+		}
 	}
 	
 
