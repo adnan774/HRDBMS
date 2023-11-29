@@ -67,7 +67,38 @@ public class DepartmentDAO {
 			return thisDepartment;		
 	}	
 	
-	
+	public ArrayList<Departments> getAllDepartments(){
+		   
+		ArrayList<Departments> allDepartments= new ArrayList<Departments>();
+		openConnection();
+		ResultSet rs1 = null;
+
+	   
+		try{
+		    String selectSQL = "SELECT department_id, department_name, location FROM departments;";
+		    rs1 = stmt.executeQuery(selectSQL);
+	    
+		    while (rs1.next()) {
+		    	Departments department = new Departments();
+		        department.setDepartment_id(rs1.getInt("department_id"));
+		        department.setDepartment_name(rs1.getString("department_name"));
+		        department.setLocation(rs1.getString("location"));
+		        allDepartments.add(department);
+		    }
+        } catch (SQLException se) {
+            System.out.println(se);
+        } finally {
+            if (rs1 != null) {
+                try {
+                    rs1.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return allDepartments;
+    }
 		
 				
 	}
