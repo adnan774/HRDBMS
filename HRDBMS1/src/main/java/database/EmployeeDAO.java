@@ -144,6 +144,46 @@ public class EmployeeDAO {
 	    }
 	    return allEmployees;
 	}
+	
+	public Employees getEmployeeByID(int emp_id) {
+
+	       openConnection();
+	       oneEmployee = null;
+	       ResultSet rs1 = null;
+	       // Create select statement and executes it
+	       try {
+	    	   System.out.println("emp_id: " + emp_id);
+	    	   String selectSQL = "SELECT employees.*, departments.department_name, departments.location, salaries.job_title, salaries.salary " +
+	                   "FROM employees " +
+	                   "JOIN departments ON employees.department_id = departments.department_id " +
+	                   "JOIN salaries ON employees.salary_id = salaries.salary_id " +
+	                   "WHERE employees.emp_id = ?";
+
+	           PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+	           preparedStatement.setInt(1, emp_id);
+	           rs1 = preparedStatement.executeQuery();
+	           System.out.println("SQL query executed");
+	           // Retrieves the results
+	           while (rs1.next()) {
+	               oneEmployee = getNextEmployee(rs1);
+	               System.out.println("Fetched oneEmployee: " + oneEmployee);
+	           }
+	       } catch (SQLException se) {
+	           System.out.println(se);
+	       } finally {
+	           if (rs1 != null) {
+	               try {
+	                   rs1.close();
+	               } catch (SQLException e) {
+	                   e.printStackTrace();
+	               }
+	           }
+	       }
+
+	       return oneEmployee;
+	   }   
+	
+	
 
 	}
 	
