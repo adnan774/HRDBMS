@@ -160,6 +160,20 @@ public class DepartmentDAO {
 	       return departmentNames;
 	   } 
 	
+	public int getDepartmentIdByName(String department_name) throws SQLException {
+	    openConnection();
+	    String sql = "SELECT department_id FROM departments WHERE department_name = ?";
+	    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+	    preparedStatement.setString(1, department_name);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    int departmentId = 0;
+	    if (resultSet.next()) {
+	        departmentId = resultSet.getInt("department_id");
+	    }
+	    closeConnection();
+	    return departmentId;
+	}
+	
 	
 		
 				
