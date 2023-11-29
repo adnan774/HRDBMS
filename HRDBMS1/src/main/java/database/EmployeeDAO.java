@@ -244,6 +244,25 @@ public class EmployeeDAO {
 		    return b;
 		}
 	 
+	 public boolean deleteEmployee(int emp_id) throws SQLException {
+			
+			openConnection();
+			boolean b = false;
+			try {	
+				String sql = "delete from employees WHERE emp_id = "+ emp_id;
+				System.out.println(sql);
+			
+				stmt.executeUpdate(sql);
+		
+				closeConnection();
+				b = true;
+			} catch (SQLException s) {
+				throw new SQLException("Employee Not Deleted");
+			}
+			return b;
+		}
+	 
+	 
 
 	}
 	
