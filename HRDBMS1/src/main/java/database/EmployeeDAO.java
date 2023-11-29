@@ -183,7 +183,37 @@ public class EmployeeDAO {
 	       return oneEmployee;
 	   }   
 	
-	
+	 public boolean insertEmployee(Employees e, int departmentId, int salaryId) throws SQLException {
+		    openConnection();
+		    boolean b = false;
+		    try {
+		        String sql = "INSERT INTO employees (first_name, last_name, email, date_of_birth, phone_number, hire_date, address,"
+		        		+ " city, town, post_code, department_id, salary_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		        preparedStatement.setString(1, e.getFirst_name());
+		        preparedStatement.setString(2, e.getLast_name());
+		        preparedStatement.setString(3, e.getEmail());
+		        preparedStatement.setString(4, e.getDob());
+		        preparedStatement.setString(5, e.getPhone_number());
+		        preparedStatement.setString(6, e.getHire_date());
+		        preparedStatement.setString(7, e.getAddress());
+		        preparedStatement.setString(8, e.getCity());
+		        preparedStatement.setString(9, e.getTown());
+		        preparedStatement.setString(10, e.getPost_code());
+		        preparedStatement.setInt(11, departmentId);
+		        preparedStatement.setInt(12, salaryId);
+		        preparedStatement.executeUpdate();
+		        b = true;
+		    } catch (SQLException s) {
+		    	s.printStackTrace(); 
+		        throw new SQLException("Employee Not Added");
+		    } finally {
+		        closeConnection();
+		    }
+		    return b;
+		}
+	 
+	 
 
 	}
 	
