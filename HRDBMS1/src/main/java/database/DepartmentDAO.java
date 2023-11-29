@@ -191,7 +191,21 @@ public class DepartmentDAO {
 		return b;
 	}
 	
-	
+	public boolean updateDepartment(Departments d) throws SQLException {
+	    openConnection();
+	    boolean b = false;
+	    try {    
+	        String sql = "update departments set department_name = '" + d.getDepartment_name() + "' , location = '" 
+	    + d.getLocation() + "' WHERE department_id = " + d.getDepartment_id() + ";";
+	        System.out.println(sql);
+	        int numRowsAffected = stmt.executeUpdate(sql);
+	        b = numRowsAffected > 0;
+	        closeConnection();
+	    } catch (SQLException s) {
+	        throw new SQLException("Department Not Updated");
+	    }
+	    return b;
+	}
 		
 				
 	}
