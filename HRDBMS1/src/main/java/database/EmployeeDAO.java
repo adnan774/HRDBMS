@@ -262,7 +262,46 @@ public class EmployeeDAO {
 			return b;
 		}
 	 
-	 
+	//Main Search 
+		public ArrayList<Employees> searchEmployees(String searchStr) {
+		    ArrayList<Employees> allEmployees = new ArrayList<Employees>();
+		    openConnection();
+		    ResultSet rs1 = null;
+
+		    try {
+		        String sql = "SELECT * FROM employees e "
+		            + "JOIN departments d ON e.department_id = d.department_id "
+		            + "JOIN salaries s ON e.salary_id = s.salary_id "
+		            + "WHERE e.first_name LIKE ? OR e.last_name LIKE ? OR e.email LIKE ? "
+		            + "OR e.date_of_birth LIKE ? OR e.phone_number LIKE ? OR e.hire_date LIKE ? "
+		            + "OR e.address LIKE ? OR e.city LIKE ? OR e.town LIKE ? OR e.post_code LIKE ? "
+		            + "OR d.department_name LIKE ? OR s.job_title LIKE ? OR s.salary LIKE ? "
+		            + "ORDER BY e.emp_id";
+		        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		        for (int i = 1; i <= 13; i++) {
+		            preparedStatement.setString(i, "%" + searchStr + "%");
+		        }
+		        rs1 = preparedStatement.executeQuery();
+
+		        while (rs1.next()) {
+		            Employees oneEmployee = getNextEmployee(rs1);
+		            allEmployees.add(oneEmployee);
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    } finally {
+		        if (rs1 != null) {
+		            try {
+		                rs1.close();
+		            } catch (SQLException e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    }
+
+		    return allEmployees;
+		}
+
 
 	}
 	
