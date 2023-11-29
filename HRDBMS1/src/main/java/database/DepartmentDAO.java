@@ -174,6 +174,23 @@ public class DepartmentDAO {
 	    return departmentId;
 	}
 	
+	public boolean insertDepartment(Departments d) throws SQLException {
+
+		openConnection();
+		boolean b = false;
+		try {
+			String sql = "insert into departments (department_name, location) "
+					+ "values ('" + d.getDepartment_name() + "','" + d.getLocation() + "');";
+			System.out.println(sql);
+			b = stmt.execute(sql);
+			closeConnection();
+			b = true;
+		} catch (SQLException s) {
+			throw new SQLException("Department Not Added");
+		}
+		return b;
+	}
+	
 	
 		
 				
