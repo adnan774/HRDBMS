@@ -143,6 +143,38 @@ public class SalaryDAO {
 		    closeConnection();
 		    return salaryId;
 		}
+		
+		public List<String> getAllJobTitles() {
+
+		       openConnection();
+		       List<String> jobTitles = new ArrayList<>();
+		       ResultSet rs1 = null;
+		       // Creates select statement and executes it
+		       try {
+		    	   String selectSQL = "SELECT DISTINCT job_title FROM salaries ORDER BY job_title";
+		           PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+		           rs1 = preparedStatement.executeQuery();
+		           // Retrieve the results
+		           while (rs1.next()) {
+		        	   String jobTitle = rs1.getString("job_title");
+		               jobTitles.add(jobTitle);
+		           }
+		       } catch (SQLException se) {
+		           System.out.println(se);
+		       } finally {
+		           if (rs1 != null) {
+		               try {
+		                   rs1.close();
+		               } catch (SQLException e) {
+		                   e.printStackTrace();
+		               }
+		           }
+		       }
+
+		       return jobTitles;
+		   }   
+		
+		
 	}
 	
 
