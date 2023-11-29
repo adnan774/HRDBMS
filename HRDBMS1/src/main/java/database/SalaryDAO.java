@@ -1,7 +1,6 @@
 package database;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -131,7 +130,19 @@ public class SalaryDAO {
 		       return oneSalary;
 		   }   
 		
-		
+		public int getSalaryIdByJobTitle(String job_title) throws SQLException {
+		    openConnection();
+		    String sql = "SELECT salary_id FROM salaries WHERE job_title = ?";
+		    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		    preparedStatement.setString(1, job_title);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    int salaryId = 0;
+		    if (resultSet.next()) {
+		        salaryId = resultSet.getInt("salary_id");
+		    }
+		    closeConnection();
+		    return salaryId;
+		}
 	}
 	
 
