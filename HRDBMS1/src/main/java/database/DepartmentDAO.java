@@ -206,6 +206,24 @@ public class DepartmentDAO {
 	    }
 	    return b;
 	}
+	
+	public boolean deleteDepartment(int department_id) throws SQLException {
+		
+		openConnection();
+		boolean b = false;
+		try {	
+			String sql = "delete from departments WHERE department_id = "+ department_id;
+			System.out.println(sql);
+		
+			stmt.executeUpdate(sql);
+	
+			closeConnection();
+			b = true;
+		} catch (SQLException s) {
+			throw new SQLException("Department Not Deleted");
+		}
+		return b;
+	}
 		
 				
 	}
