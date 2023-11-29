@@ -101,6 +101,36 @@ public class SalaryDAO {
 	        return allSalaries;
 	    }
 			
+		public Salaries getSalaryByID(int salary_id) {
+
+		       openConnection();
+		       oneSalary = null;
+		       ResultSet rs1 = null;
+		       // Creates select statement and executes it
+		       try {
+		           String selectSQL = "select * from salaries where salary_id=?";
+		           PreparedStatement preparedStatement = conn.prepareStatement(selectSQL);
+		           preparedStatement.setInt(1, salary_id);
+		           rs1 = preparedStatement.executeQuery();
+		           // Retrieves the results
+		           while (rs1.next()) {
+		        	   oneSalary = getNextSalary(rs1);
+		           }
+		       } catch (SQLException se) {
+		           System.out.println(se);
+		       } finally {
+		           if (rs1 != null) {
+		               try {
+		                   rs1.close();
+		               } catch (SQLException e) {
+		                   e.printStackTrace();
+		               }
+		           }
+		       }
+
+		       return oneSalary;
+		   }   
+		
 		
 	}
 	
