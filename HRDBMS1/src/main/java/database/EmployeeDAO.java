@@ -1,6 +1,5 @@
 package database;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -50,7 +49,49 @@ public class EmployeeDAO {
 		}
 	}
 	
-	
+	private Employees getNextEmployee(ResultSet rs) {
+	    Employees thisEmployee = null;
+	    try {
+	        Departments department = new Departments(
+	            rs.getInt("department_id"),
+	            rs.getString("department_name"),
+	            rs.getString("location")
+	        );
+	        
+	        Salaries salary = new Salaries(
+	            rs.getInt("salary_id"),
+	            rs.getString("job_title"),
+	            rs.getFloat("salary")
+	        );
+	        
+	        System.out.println("department_id: " + rs.getInt("department_id"));
+	        System.out.println("department_name: " + rs.getString("department_name"));
+	        System.out.println("location: " + rs.getString("location"));
+	        System.out.println("salary_id: " + rs.getInt("salary_id"));
+	        System.out.println("job_title: " + rs.getString("job_title"));
+	        System.out.println("salary: " + rs.getFloat("salary"));
+
+	        thisEmployee = new Employees(
+	        	rs.getInt("emp_id"),
+				rs.getString("first_name"),
+				rs.getString("last_name"),
+				rs.getString("email"),
+				rs.getString("date_of_birth"),
+				rs.getString("phone_number"),
+				rs.getString("hire_date"),
+				rs.getString("address"),
+				rs.getString("city"),
+				rs.getString("town"),
+				rs.getString("post_code"),
+	            department,
+	            salary
+	        );
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return thisEmployee;
+	}
 
 	}
 	
