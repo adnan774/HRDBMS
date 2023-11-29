@@ -50,6 +50,24 @@ public class DepartmentDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	//Departments Queries
+	
+	private Departments getNextDepartment(ResultSet rs){
+		Departments thisDepartment=null;
+		try {
+			thisDepartment = new Departments(
+					rs.getInt("department_id"),
+					rs.getString("department_name"),
+					rs.getString("location"));	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return thisDepartment;		
+	}	
+	
+	
 		
 				
 	}
