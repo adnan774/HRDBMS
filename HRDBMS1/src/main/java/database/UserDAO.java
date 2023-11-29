@@ -62,6 +62,33 @@ public class UserDAO {
         return user;
     }
     
+    public void hashPasswords() {
+    	// Method to hash existing plain text passwords stored in database
+        openConnection();
+        try {
+            String selectSql = "SELECT user_id, password FROM users";
+            Statement selectStmt = conn.createStatement();
+            ResultSet rs = selectStmt.executeQuery(selectSql);
+
+            while (rs.next()) {
+                int userId = rs.getInt("user_id");
+                String plainPassword = rs.getString("password");
+
+                String salt = BCrypt.gensalt();
+                String hashedPassword = BCrypt.hashpw(plainPassword, salt);
+
+                String updateSql = "UPDATE users SET password = ? WHERE user_id = ?";
+                PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+                updateStmt.setString(1, hashedPassword);
+                updateStmt.setInt(2, userId);
+                updateStmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
    
     
 
