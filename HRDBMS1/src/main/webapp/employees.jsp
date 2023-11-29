@@ -53,6 +53,15 @@
 </nav>
 
 
+<div class="container mt-4">
+    <h1 class="text-center text-primary">Employees Table</h1>
+    <div class="d-flex flex-column align-items-center">
+    <button type="button" class="nav-link  btn btn-info" data-bs-toggle="modal" data-bs-target="#insertEmployeeModal">
+  			+ Insert Employee
+		</button>
+		</div>
+</div>
+
 
 </body>
 </html>
