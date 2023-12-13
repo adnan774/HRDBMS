@@ -43,5 +43,29 @@ public class SalariesAPIController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+    
+    
+    // Handle POST requests to add a new salary
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Gson gson = new Gson();
+        SalaryDAO dao = new SalaryDAO();
+
+        try {
+            Salaries salary = gson.fromJson(request.getReader(), Salaries.class);
+            dao.insertSalary(salary);
+            response.getWriter().write(gson.toJson(salary));
+            response.setStatus(HttpServletResponse.SC_CREATED); // 201 Created status
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"message\": \"Error adding salary: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            response.getWriter().write("{\"message\": \"Invalid salary data: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+        }
+    }
 
 }
