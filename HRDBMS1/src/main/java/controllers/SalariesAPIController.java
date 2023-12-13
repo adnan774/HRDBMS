@@ -67,5 +67,38 @@ public class SalariesAPIController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
         }
     }
+    
+    
+    // Handle PUT requests to update an existing salary
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Gson gson = new Gson();
+        SalaryDAO dao = new SalaryDAO();
+
+        try {
+            // Parse the request body to a Salaries object
+            Salaries salary = gson.fromJson(request.getReader(), Salaries.class);
+
+            // Update the salary
+            boolean isUpdated = dao.updateSalary(salary);
+            if (isUpdated) {
+                response.getWriter().write(gson.toJson(salary));
+                response.setStatus(HttpServletResponse.SC_OK); // 200 OK status
+            } else {
+                // Salary not found or unable to update
+                response.getWriter().write("{\"message\": \"Salary not updated. Please try again.\"}");
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found status
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"message\": \"Error updating salary: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        } catch (Exception e) {
+            response.getWriter().write("{\"message\": \"Invalid salary data: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+        }
+    }
 
 }
