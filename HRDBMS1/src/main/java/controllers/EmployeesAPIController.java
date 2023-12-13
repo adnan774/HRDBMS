@@ -131,5 +131,39 @@ public class EmployeesAPIController extends HttpServlet {
     }
     
     
-    
+    // Handle DELETE requests to delete an employee
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Gson gson = new Gson();
+        EmployeeDAO dao = new EmployeeDAO();
+        String empIdParam = request.getParameter("emp_id");
+
+        if (empIdParam != null) {
+            try {
+                int emp_id = Integer.parseInt(empIdParam);
+                boolean isDeleted = dao.deleteEmployee(emp_id);
+
+                if (isDeleted) {
+                    response.getWriter().write(gson.toJson("Employee deleted successfully."));
+                    response.setStatus(HttpServletResponse.SC_OK); // 200 OK status
+                } else {
+                    response.getWriter().write(gson.toJson("Employee not found."));
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found status
+                }
+            } catch (NumberFormatException e) {
+                response.getWriter().write(gson.toJson("Invalid employee ID format."));
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+            } catch (SQLException e) {
+                e.printStackTrace();
+                response.getWriter().write(gson.toJson("Internal server error: " + e.getMessage()));
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            }
+        } else {
+            response.getWriter().write(gson.toJson("Employee ID not provided."));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+        }
+    }
+
 }
