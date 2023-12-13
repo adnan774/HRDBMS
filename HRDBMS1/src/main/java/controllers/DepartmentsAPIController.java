@@ -101,6 +101,42 @@ public class DepartmentsAPIController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
         }
     }
+    
+    
+    // Handle DELETE requests to delete a department
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        DepartmentDAO dao = new DepartmentDAO();
+        Gson gson = new Gson();
 
+        // Extract department ID from the request
+        String departmentIdParam = request.getParameter("department_id");
+        if (departmentIdParam != null) {
+            try {
+                int department_id = Integer.parseInt(departmentIdParam);
+                boolean isDeleted = dao.deleteDepartment(department_id);
+
+                if (isDeleted) {
+                	response.getWriter().write(gson.toJson("Department deleted successfully."));
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 No Content status
+                } else {
+                    // Department not found or unable to delete
+                	response.getWriter().write(gson.toJson("Department not found."));
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found status
+                }
+            } catch (NumberFormatException e) {
+                // Invalid department ID format
+            	response.getWriter().write(gson.toJson("Invalid department ID format."));
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+            } catch (SQLException e) {
+                e.printStackTrace();
+                response.getWriter().write(gson.toJson("Internal server error: " + e.getMessage()));
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            }
+        } else {
+            // Department ID not provided
+        	response.getWriter().write(gson.toJson("Department ID not provided."));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+        }
+    }
    
 }
