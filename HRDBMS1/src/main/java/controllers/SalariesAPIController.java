@@ -100,5 +100,42 @@ public class SalariesAPIController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
         }
     }
+    
+    
+    // Handle DELETE requests to delete a salary
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        SalaryDAO dao = new SalaryDAO();
+        Gson gson = new Gson();
+        
+        // Extract salary ID from the request
+        String salaryIdParam = request.getParameter("salary_id");
+        if (salaryIdParam != null) {
+            try {
+                int salary_id = Integer.parseInt(salaryIdParam);
+                boolean isDeleted = dao.deleteSalary(salary_id);
+
+                if (isDeleted) {
+                	response.getWriter().write(gson.toJson("Salary deleted successfully."));
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 No Content status
+                } else {
+                    // Salary not found or unable to delete
+                	response.getWriter().write(gson.toJson("Salary not found."));
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found status
+                }
+            } catch (NumberFormatException e) {
+                // Invalid salary ID format
+            	response.getWriter().write(gson.toJson("Invalid salary ID format."));
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+            } catch (SQLException e) {
+                e.printStackTrace();
+                response.getWriter().write(gson.toJson("Internal server error: " + e.getMessage()));
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            }
+        } else {
+            // Salary ID not provided
+        	response.getWriter().write(gson.toJson("Salary ID not provided."));
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+        }
+    }
 
 }
