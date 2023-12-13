@@ -15,14 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
 import database.DepartmentDAO;
 import database.EmployeeDAO;
 import database.SalaryDAO;
 import models.Departments;
 import models.Employees;
 import models.Salaries;
-
-
 
 @WebServlet("/employee")
 public class EmployeesController extends HttpServlet {
