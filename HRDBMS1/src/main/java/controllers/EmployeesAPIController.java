@@ -92,4 +92,44 @@ public class EmployeesAPIController extends HttpServlet {
     }
     
     
+    // Handle PUT requests to update an employee
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Gson gson = new Gson();
+        EmployeeDAO employeeDAO = new EmployeeDAO();
+        DepartmentDAO departmentDAO = new DepartmentDAO();
+        SalaryDAO salaryDAO = new SalaryDAO();
+
+        try {
+            // Parse the request body to an Employees object
+            Employees employee = gson.fromJson(request.getReader(), Employees.class);
+
+            // Extract department name and job title from the employee object
+            String departmentName = employee.getDepartments().getDepartment_name();
+            String jobTitle = employee.getSalaries().getJob_title();
+
+            // Look up the department ID and salary ID
+            int departmentId = departmentDAO.getDepartmentIdByName(departmentName);
+            int salaryId = salaryDAO.getSalaryIdByJobTitle(jobTitle);
+
+            // Update the employee
+            boolean isUpdated = employeeDAO.updateEmployee(employee, departmentId, salaryId);
+            if (isUpdated) {
+                response.getWriter().write(gson.toJson(employee));
+                response.setStatus(HttpServletResponse.SC_OK); // 200 OK status
+            } else {
+                response.getWriter().write("{\"message\": \"Employee not updated. Please try again.\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"message\": \"Error: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        }
+    }
+    
+    
+    
 }
