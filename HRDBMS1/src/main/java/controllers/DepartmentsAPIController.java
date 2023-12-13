@@ -68,6 +68,39 @@ public class DepartmentsAPIController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
         }
     }
+    
+    
+    // Handle PUT requests to update an existing department
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        Gson gson = new Gson();
+        DepartmentDAO dao = new DepartmentDAO();
+
+        try {
+            // Parse the request body to a Departments object
+            Departments department = gson.fromJson(request.getReader(), Departments.class);
+
+            // Update the department
+            boolean isUpdated = dao.updateDepartment(department);
+            if (isUpdated) {
+                response.getWriter().write(gson.toJson(department));
+                response.setStatus(HttpServletResponse.SC_OK); // 200 OK status
+            } else {
+                // Department not found or unable to update
+                response.getWriter().write("{\"message\": \"Department not updated. Please try again.\"}");
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found status
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"message\": \"Error updating department: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+        } catch (Exception e) {
+            response.getWriter().write("{\"message\": \"Invalid department data: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+        }
+    }
 
    
 }
