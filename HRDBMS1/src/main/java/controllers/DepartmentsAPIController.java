@@ -44,6 +44,30 @@ public class DepartmentsAPIController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+    
+    
+    // Handle POST requests to add a new department
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        Gson gson = new Gson();
+        DepartmentDAO dao = new DepartmentDAO();
+
+        try {
+            Departments department = gson.fromJson(request.getReader(), Departments.class);
+            dao.insertDepartment(department);
+            response.getWriter().write(gson.toJson(department));
+            response.setStatus(HttpServletResponse.SC_CREATED); // 201 Created status
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"message\": \"Error adding department: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            response.getWriter().write("{\"message\": \"Invalid department data: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request status
+        }
+    }
 
    
 }
