@@ -18,6 +18,24 @@ function Employees() {
         setLoading(false);
       });
   }, []);
+  
+  const handleUpdate = (empId) => {
+    console.log('Update employee with ID:', empId);
+    // update logic here
+  };
+
+  const handleDelete = (empId) => {
+    if (window.confirm('Are you sure you want to delete this employee?')) {
+        axios.delete(`http://localhost:8082/EPAssignment/api/employee?emp_id=${empId}`)
+            .then(response => {  
+                console.log('Employee deleted successfully:', response.data);
+                setEmployees(employees.filter(employee => employee.emp_id !== empId));
+            })
+            .catch(error => {
+                console.error('Error deleting the employee:', error);
+            });
+    }
+ };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -39,6 +57,8 @@ function Employees() {
           <th>Department</th>
           <th>Job Title</th>
           <th>Salary</th>
+          <th>Update</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -57,6 +77,11 @@ function Employees() {
            	<td>{employee.departments?.department_name}</td>
             <td>{`${employee.salaries?.job_title}`}</td>
             <td>{`${employee.salaries?.salary}`}</td>
+            
+            <td>
+              <button onClick={() => handleUpdate(employee.emp_id)}>Update</button>
+              <button onClick={() => handleDelete(employee.emp_id)}>Delete</button>
+            </td>
           </tr>
         ))}
       </tbody>
