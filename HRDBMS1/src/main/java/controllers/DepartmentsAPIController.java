@@ -51,6 +51,10 @@ public class DepartmentsAPIController extends HttpServlet {
     
     // Handle POST requests to add a new department
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	response.setHeader("Access-Control-Allow-Origin", "*"); 
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.setContentType("application/json");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
@@ -75,6 +79,10 @@ public class DepartmentsAPIController extends HttpServlet {
     
     // Handle PUT requests to update an existing department
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	response.setHeader("Access-Control-Allow-Origin", "*"); 
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.setContentType("application/json");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -108,6 +116,10 @@ public class DepartmentsAPIController extends HttpServlet {
     
     // Handle DELETE requests to delete a department
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	response.setHeader("Access-Control-Allow-Origin", "*"); 
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.setContentType("application/json");
         DepartmentDAO dao = new DepartmentDAO();
         Gson gson = new Gson();
 

@@ -7,7 +7,7 @@ function Employees() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/HRDBMS1/api/employee') 
+    axios.get('http://localhost:8082/EPAssignment/api/employee') 
       .then(response => {
         setEmployees(response.data);
         setLoading(false);
@@ -37,24 +37,26 @@ function Employees() {
           <th>Town</th>
           <th>Postcode</th>
           <th>Department</th>
-          <th>Salary & Job Title</th>
+          <th>Job Title</th>
+          <th>Salary</th>
         </tr>
       </thead>
       <tbody>
         {employees.map(employee => (
           <tr key={employee.id}>
-            <td>{employee.firstName}</td>
-            <td>{employee.lastName}</td>
+            <td>{employee.first_name}</td>
+            <td>{employee.last_name}</td>
             <td>{employee.email}</td>
-           	<td>{employee.dob}</td>
-           	<td>{employee.phoneNumber}</td>
-           	<td>{employee.hireDate}</td>
+           	<td>{employee.date_of_birth}</td>
+           	<td>{employee.phone_number}</td>
+           	<td>{employee.hire_date}</td>
            	<td>{employee.address}</td>
            	<td>{employee.city}</td>
            	<td>{employee.town}</td>
-           	<td>{employee.postcode}</td>
-           	<td>{employee.department}</td>
-           	<td>{employee.jobTitles}</td>
+           	<td>{employee.post_code}</td>
+           	<td>{employee.departments?.department_name}</td>
+            <td>{`${employee.salaries?.job_title}`}</td>
+            <td>{`${employee.salaries?.salary}`}</td>
           </tr>
         ))}
       </tbody>
