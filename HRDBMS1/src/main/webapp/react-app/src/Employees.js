@@ -1,28 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import UpdateEmployeeModal from './UpdateEmployeeModel';
+
+
+
 
 function Employees() {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null); // Selected employee for update
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
 
-  useEffect(() => {
-    axios.get('http://localhost:8082/EPAssignment/api/employee') 
-      .then(response => {
-        setEmployees(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the employees:', error);
-        setError(error);
-        setLoading(false);
-      });
-  }, []);
+  const fetchEmployees = () => {
+  axios.get('http://localhost:8082/EPAssignment/api/employee')
+    .then(response => {
+      setEmployees(response.data);
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error('There was an error fetching the employees:', error);
+      setError(error);
+      setLoading(false);
+    });
+};
+
+useEffect(() => {
+  fetchEmployees();
+}, []);
   
-  const handleUpdate = (empId) => {
-    console.log('Update employee with ID:', empId);
-    // update logic here
+  const handleUpdate = (employee) => {
+    setSelectedEmployee(employee); // Set selected employee
+    setShowModal(true); // Show the modal
   };
+
+  const handleModalClose = () => {
+    setShowModal(false); // Close the modal
+    setSelectedEmployee(null); // Reset selected employee
+  };
+
+  const handleEmployeeUpdate = (updatedEmployee) => {
+	console.log("Updated Employee:", updatedEmployee);
+
+  axios.put(`http://localhost:8082/EPAssignment/api/employee`, updatedEmployee)
+    .then(response => {
+      fetchEmployees(); // Refresh employee data
+      setShowModal(false); // Close the modal
+      console.log('Employee updated successfully:', response.data);
+    })
+    .catch(error => {
+      console.error('Error updating the employee:', error);
+    });
+};
+
+
+  
 
   const handleDelete = (empId) => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
@@ -41,6 +73,7 @@ function Employees() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
+	<>
     <table>
       <thead>
         <tr>
@@ -79,13 +112,20 @@ function Employees() {
             <td>{`${employee.salaries?.salary}`}</td>
             
             <td>
-              <button onClick={() => handleUpdate(employee.emp_id)}>Update</button>
+			  <button onClick={() => handleUpdate(employee)}>Update</button>
               <button onClick={() => handleDelete(employee.emp_id)}>Delete</button>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
+    <UpdateEmployeeModal 
+        show={showModal} 
+        employee={selectedEmployee} 
+        onClose={handleModalClose}
+        onUpdate={handleEmployeeUpdate} 
+      />
+    </>
   );
 }
 
