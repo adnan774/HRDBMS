@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Button } from 'react-bootstrap';
 import UpdateEmployeeModal from './UpdateEmployeeModel';
-
+import AddEmployeeModal from './AddEmployeeModal';
 
 
 
@@ -11,6 +12,7 @@ function Employees() {
   const [error, setError] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null); // Selected employee for update
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const fetchEmployees = () => {
   axios.get('http://localhost:8082/EPAssignment/api/employee')
@@ -53,6 +55,22 @@ useEffect(() => {
     });
 };
 
+const handleAddClick = () => {
+  console.log("Add Employee button clicked");
+  setShowAddModal(true);
+};
+
+
+const handleAddModalClose = () => {
+    setShowAddModal(false);
+  };
+
+  const handleAddEmployee = (newEmployee) => {
+    // Logic to add the new employee to the list
+    // This might involve fetching the updated list or appending the new employee to the existing list
+    fetchEmployees();
+  };
+
 
   
 
@@ -74,6 +92,13 @@ useEffect(() => {
 
   return (
 	<>
+      <Button 
+        type="button" 
+        variant="primary"
+        onClick={handleAddClick}
+      >
+        Add Employee
+      </Button>
     <table>
       <thead>
         <tr>
@@ -112,8 +137,8 @@ useEffect(() => {
             <td>{`${employee.salaries?.salary}`}</td>
             
             <td>
-			  <button onClick={() => handleUpdate(employee)}>Update</button>
-              <button onClick={() => handleDelete(employee.emp_id)}>Delete</button>
+			  <Button variant="info" onClick={() => handleUpdate(employee)}>Update</Button>
+              <Button variant="danger" onClick={() => handleDelete(employee.emp_id)}>Delete</Button>
             </td>
           </tr>
         ))}
@@ -124,6 +149,11 @@ useEffect(() => {
         employee={selectedEmployee} 
         onClose={handleModalClose}
         onUpdate={handleEmployeeUpdate} 
+      />
+      <AddEmployeeModal
+        show={showAddModal}
+        onClose={handleAddModalClose}
+        onAdd={handleAddEmployee}
       />
     </>
   );

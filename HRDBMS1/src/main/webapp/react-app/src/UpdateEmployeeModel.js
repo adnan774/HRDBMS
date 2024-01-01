@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 function UpdateEmployeeModal({ show, employee, onClose, onUpdate }) {
   // Local state to manage form inputs
@@ -43,23 +44,9 @@ function UpdateEmployeeModal({ show, employee, onClose, onUpdate }) {
 
   const handleSubmit = (e) => {
   e.preventDefault();
-  
-  console.log("First Department:", departments[0]);
-console.log("First Salary:", salaries[0]);
-
-  console.log("Form Data Department ID:", formData.department_id);
-console.log("Form Data Salary ID:", formData.salary_id);
-
-
-  console.log("Form Data:", formData);
-console.log("Departments:", departments);
-console.log("Salaries:", salaries);
 
 const department = departments.find(dept => dept.department_id === parseInt(formData.department_id));
 const salary = salaries.find(sal => sal.salary_id === parseInt(formData.salary_id));
-
-console.log("Found Department:", department);
-console.log("Found Salary:", salary);
 
   
   if (!department || !salary) {
@@ -90,7 +77,152 @@ console.log("Found Salary:", salary);
   if (!show) return null;
 
   return (
-    <div className="modal">
+	<Modal show={show} onHide={onClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Update Employee</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="first_name"
+              value={formData.first_name || ''} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+
+           <Form.Group className="mb-3">
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="last_name"
+              value={formData.last_name} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          <Form.Group className="mb-3">
+            <Form.Label>Email</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="email"
+              value={formData.email} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          <Form.Group className="mb-3">
+            <Form.Label>Date of Birth</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="date_of_birth"
+              value={formData.date_of_birth} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          
+          <Form.Group className="mb-3">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="phone_number"
+              value={formData.phone_number} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          <Form.Group className="mb-3">
+            <Form.Label>Hire Date</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="hire_date"
+              value={formData.hire_date} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          <Form.Group className="mb-3">
+            <Form.Label>Address</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="address"
+              value={formData.address} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          <Form.Group className="mb-3">
+            <Form.Label>City</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="city"
+              value={formData.city} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          <Form.Group className="mb-3">
+            <Form.Label>Town</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="town"
+              value={formData.town} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+          
+          <Form.Group className="mb-3">
+            <Form.Label>Postcode</Form.Label>
+            <Form.Control 
+              type="text" 
+              name="post_code"
+              value={formData.post_code} 
+              onChange={handleChange} 
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Department</Form.Label>
+            <Form.Control 
+              as="select" 
+              name="department_id" 
+              value={formData.department_id || ''} 
+              onChange={handleChange}
+            >
+              {departments.map(department => (
+                <option key={department.department_id} value={department.department_id}>
+                  {department.department_name}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Job Title</Form.Label>
+            <Form.Control 
+              as="select" 
+              name="salary_id" 
+              value={formData.salary_id || ''} 
+              onChange={handleChange}
+            >
+              {salaries.map(salary => (
+                <option key={salary.salary_id} value={salary.salary_id}>
+                  {salary.job_title}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onClose}>Close</Button>
+        <Button variant="primary" type="submit" onClick={handleSubmit}>Update</Button>
+      </Modal.Footer>
+    </Modal>
+    /*<div className="modal">
       <div className="modal-content">
         <div className="modal-header">
           <h5 className="modal-title">Update Employee</h5>
@@ -261,7 +393,7 @@ console.log("Found Salary:", salary);
           </form>
         </div>
       </div>
-    </div>
+    </div>*/
   );
 }
 
