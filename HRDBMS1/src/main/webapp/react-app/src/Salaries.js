@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Table, Modal, Form } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
+import UpdateSalaryModal from './UpdateSalaryModal';
+import AddSalaryModal from './AddSalaryModal';
+
+
 
 function Salaries() {
   const [salaries, setSalaries] = useState([]);
@@ -8,6 +12,7 @@ function Salaries() {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedSalary, setSelectedSalary] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const fetchSalaries = () => {
     axios.get('http://localhost:8082/EPAssignment/api/salaries')
@@ -25,13 +30,7 @@ function Salaries() {
   useEffect(() => {
     fetchSalaries();
   }, []);
-
-  const handleAddClick = () => {
-    console.log("Add Salary button clicked");
-    setSelectedSalary(null);
-    setShowModal(true);
-  };
-
+  
   const handleModalClose = () => {
     setShowModal(false);
     setSelectedSalary(null);
@@ -40,6 +39,35 @@ function Salaries() {
   const handleUpdate = (salary) => {
     setSelectedSalary(salary);
     setShowModal(true);
+  };
+
+  const handleSalaryUpdate = (updatedSalary) => {
+    console.log('Updated Salary:', updatedSalary);
+    
+    axios.put(`http://localhost:8082/EPAssignment/api/salaries`, updatedSalary)
+    .then(response => {
+      fetchSalaries(); // Refresh salary data
+      setShowModal(false); // Close the modal
+      console.log('Salary updated successfully:', response.data);
+    })
+    .catch(error => {
+      console.error('Error updating the Salary:', error);
+    });
+  };
+
+  const handleAddClick = () => {
+    console.log("Add Salary button clicked");
+    setShowAddModal(true);
+  };
+  
+  const handleAddModalClose = () => {
+    setShowAddModal(false);
+  };
+
+  const handleAddSalary = (newSalary) => {
+    // Logic to add the new salary to the list
+    // This might involve fetching the updated list or appending the new salary to the existing list
+    fetchSalaries();
   };
 
   const handleDelete = (salaryId) => {
@@ -85,21 +113,17 @@ function Salaries() {
           ))}
         </tbody>
       </Table>
-
-      {/* Modal for Add/Update Salary */}
-      <Modal show={showModal} onHide={handleModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedSalary ? 'Update' : 'Add'} Salary</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {/* Form for adding/updating a salary */}
-          {/* Implement form here */}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleModalClose}>Close</Button>
-          <Button variant="primary">Save Changes</Button>
-        </Modal.Footer>
-      </Modal>
+	  <UpdateSalaryModal 
+        show={showModal} 
+        salary={selectedSalary} 
+        onClose={handleModalClose} 
+        onUpdate={handleSalaryUpdate} 
+      />
+      <AddSalaryModal
+        show={showAddModal}
+        onClose={handleAddModalClose}
+        onAdd={handleAddSalary}
+      />
     </>
   );
 }
