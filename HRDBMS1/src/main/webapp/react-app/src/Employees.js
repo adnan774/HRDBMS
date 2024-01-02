@@ -92,6 +92,9 @@ const handleAddModalClose = () => {
 
   return (
 	<>
+	
+      <h1 className="text-center text-primary" >Employees</h1>
+      
       <Button 
         type="button" 
         variant="primary"

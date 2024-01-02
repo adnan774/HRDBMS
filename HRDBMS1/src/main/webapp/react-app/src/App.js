@@ -1,14 +1,21 @@
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Employees from './Employees';
-import NavBar from './NavBar';
+import Salaries from './Salaries';
+import NavBar from './NavBar'; 
 
 function App() {
   return (
-    <div>
-    <NavBar />
-      <h1>Employees</h1>
-      <Employees />
-    </div>
+    <Router>
+      <NavBar />
+      <Routes>
+        <Route path="/employees" element={<Employees />} />
+        <Route path="/salaries" element={<Salaries />} />
+        
+        {/* Add more routes as needed */}
+      </Routes>
+    </Router>
   );
 }
 
