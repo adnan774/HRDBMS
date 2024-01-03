@@ -6,7 +6,8 @@ import AddEmployeeModal from './AddEmployeeModal';
 
 
 
-function Employees() {
+
+function Employees({ searchTerm }) {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,8 +29,27 @@ function Employees() {
 };
 
 useEffect(() => {
-  fetchEmployees();
-}, []);
+    if (searchTerm) {
+      // Fetch search results if searchTerm is not empty
+      const fetchSearchResults = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8082/EPAssignment/api/employee?search=${searchTerm}`);
+          setEmployees(response.data);
+        } catch (err) {
+          console.error('Search error:', err);
+          setError(err);
+        }
+      };
+      fetchSearchResults();
+    } else {
+      // Fetch all employees if searchTerm is empty
+      fetchEmployees();
+    }
+  }, [searchTerm]);
+
+	const handleSearchResults = (results) => {
+	    setEmployees(results); // Update the employees state with the search results
+	  };
   
   const handleUpdate = (employee) => {
     setSelectedEmployee(employee); // Set selected employee

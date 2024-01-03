@@ -29,24 +29,53 @@ public class EmployeesAPIController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     
-    // Handle GET requests for all employees
+	/*
+	 * // Handle GET requests for all employees protected void
+	 * doGet(HttpServletRequest request, HttpServletResponse response) throws
+	 * ServletException, IOException {
+	 * response.setHeader("Access-Control-Allow-Origin", "*");
+	 * response.setHeader("Access-Control-Allow-Methods",
+	 * "GET, POST, PUT, DELETE, OPTIONS");
+	 * response.setHeader("Access-Control-Allow-Headers",
+	 * "Content-Type, Authorization"); response.setContentType("application/json");
+	 * response.setCharacterEncoding("UTF-8");
+	 * 
+	 * try { EmployeeDAO dao = new EmployeeDAO(); ArrayList<Employees> allEmployees
+	 * = dao.getAllEmployees(); String json = new Gson().toJson(allEmployees);
+	 * response.getWriter().write(json); } catch (Exception e) {
+	 * response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	 * response.getWriter().write("Internal server error: " + e.getMessage()); } }
+	 */
+    
+ // Handle GET requests for all employees or search for specific employees
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	response.setHeader("Access-Control-Allow-Origin", "*"); 
+        response.setHeader("Access-Control-Allow-Origin", "*"); 
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
+        String searchQuery = request.getParameter("search");
+        EmployeeDAO dao = new EmployeeDAO();
+
         try {
-            EmployeeDAO dao = new EmployeeDAO();
-            ArrayList<Employees> allEmployees = dao.getAllEmployees();
-            String json = new Gson().toJson(allEmployees);
+            ArrayList<Employees> employees;
+            if (searchQuery != null && !searchQuery.isEmpty()) {
+                // Perform search based on the query
+                employees = dao.searchEmployees(searchQuery);
+            } else {
+                // Get all employees if no search query is provided
+                employees = dao.getAllEmployees();
+            }
+            
+            String json = new Gson().toJson(employees);
             response.getWriter().write(json);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Internal server error: " + e.getMessage());
         }
     }
+
     
     
     // Handle POST requests to add a new employee
