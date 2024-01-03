@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import UpdateEmployeeModal from './UpdateEmployeeModel';
 import AddEmployeeModal from './AddEmployeeModal';
 
@@ -92,61 +92,50 @@ const handleAddModalClose = () => {
 
   return (
 	<>
-	
-      <h1 className="text-center text-primary" >Employees</h1>
-      
-      <Button 
-        type="button" 
-        variant="primary"
-        onClick={handleAddClick}
-      >
-        Add Employee
-      </Button>
-    <table>
-      <thead>
-        <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Email</th>
-          <th>Date of Birth</th>
-          <th>Phone Number</th>
-          <th>Hire Date</th>
-          <th>Address</th>
-          <th>City</th>
-          <th>Town</th>
-          <th>Postcode</th>
-          <th>Department</th>
-          <th>Job Title</th>
-          <th>Salary</th>
-          <th>Update</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        {employees.map(employee => (
-          <tr key={employee.id}>
-            <td>{employee.first_name}</td>
-            <td>{employee.last_name}</td>
-            <td>{employee.email}</td>
-           	<td>{employee.date_of_birth}</td>
-           	<td>{employee.phone_number}</td>
-           	<td>{employee.hire_date}</td>
-           	<td>{employee.address}</td>
-           	<td>{employee.city}</td>
-           	<td>{employee.town}</td>
-           	<td>{employee.post_code}</td>
-           	<td>{employee.departments?.department_name}</td>
-            <td>{`${employee.salaries?.job_title}`}</td>
-            <td>{`${employee.salaries?.salary}`}</td>
-            
-            <td>
-			  <Button variant="info" onClick={() => handleUpdate(employee)}>Update</Button>
-              <Button variant="danger" onClick={() => handleDelete(employee.emp_id)}>Delete</Button>
-            </td>
+	<h1 className="text-center text-primary">Employees</h1>
+      <Button variant="info" onClick={handleAddClick}>+ Insert Employee</Button>
+      <Table striped bordered hover className="mt-4">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Date of Birth</th>
+            <th>Phone Number</th>
+            <th>Hire Date</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Town</th>
+            <th>Postcode</th>
+            <th>Department</th>
+            <th>Job Title</th>
+            <th>Salary</th>
+            <th>Update</th>
+            <th>Delete</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {employees.map(employee => (
+            <tr key={employee.id}>
+              <td>{employee.first_name}</td>
+              <td>{employee.last_name}</td>
+              <td>{employee.email}</td>
+           	  <td>{employee.date_of_birth}</td>
+           	  <td>{employee.phone_number}</td>
+           	  <td>{employee.hire_date}</td>
+           	  <td>{employee.address}</td>
+           	  <td>{employee.city}</td>
+           	  <td>{employee.town}</td>
+           	  <td>{employee.post_code}</td>
+           	  <td>{employee.departments?.department_name}</td>
+              <td>{`${employee.salaries?.job_title}`}</td>
+              <td>{`${employee.salaries?.salary}`}</td>
+              <td><Button variant="info" onClick={() => handleUpdate(employee)}>Update</Button></td>
+              <td><Button variant="danger" onClick={() => handleDelete(employee.emp_id)}>Delete</Button></td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     <UpdateEmployeeModal 
         show={showModal} 
         employee={selectedEmployee} 
