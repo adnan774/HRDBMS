@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import com.google.gson.Gson;
 
 import database.DepartmentDAO;
@@ -27,25 +28,6 @@ import models.Salaries;
 @WebServlet("/api/employee")
 public class EmployeesAPIController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    
-	/*
-	 * // Handle GET requests for all employees protected void
-	 * doGet(HttpServletRequest request, HttpServletResponse response) throws
-	 * ServletException, IOException {
-	 * response.setHeader("Access-Control-Allow-Origin", "*");
-	 * response.setHeader("Access-Control-Allow-Methods",
-	 * "GET, POST, PUT, DELETE, OPTIONS");
-	 * response.setHeader("Access-Control-Allow-Headers",
-	 * "Content-Type, Authorization"); response.setContentType("application/json");
-	 * response.setCharacterEncoding("UTF-8");
-	 * 
-	 * try { EmployeeDAO dao = new EmployeeDAO(); ArrayList<Employees> allEmployees
-	 * = dao.getAllEmployees(); String json = new Gson().toJson(allEmployees);
-	 * response.getWriter().write(json); } catch (Exception e) {
-	 * response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	 * response.getWriter().write("Internal server error: " + e.getMessage()); } }
-	 */
     
  // Handle GET requests for all employees or search for specific employees
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
